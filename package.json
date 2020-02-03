@@ -1,0 +1,25 @@
+{
+  "name": "@zalari/custom-element-loader-prototype",
+  "version": "0.1.0",
+  "description": "This is a prototype for dynamically loading CustomElements and re-applying them instantly for instant updates.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.zalari.de:zalari/prototypes/custom-element-loader-prototype.git"
+  },
+  "keywords": [
+    "custom",
+    "element",
+    "custom",
+    "elements",
+    "web",
+    "components",
+    "prototype",
+    "zalari"
+  ],
+  "author": "Christian Ulbrich <christian.ulbrich@zalari.de>",
+  "license": "MIT"
+}
