@@ -21,5 +21,12 @@
     "zalari"
   ],
   "author": "Christian Ulbrich <christian.ulbrich@zalari.de>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@zalari-oss/ce-hello-world-pure": "^0.1.0",
+    "http-server": "^0.12.1",
+    "parcel-bundler": "^1.12.4",
+    "shx": "^0.3.2",
+    "typescript": "^3.7.5"
+  }
 }
