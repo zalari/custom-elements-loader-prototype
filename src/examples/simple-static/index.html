@@ -2,9 +2,51 @@
   <head>
     <title>Pure Custom Elements on the rocks - Simple example</title>
     <script src="/dist/index.js"></script>
-    <script src="https://unpkg.com/@zalari-oss/ce-hello-world-pure@*/dist/index.js"></script>
   </head>
-  <body>
-    <z4i-hello-world></z4i-hello-world>
+  <body onload="load()">
+    <script>
+
+      const ELEMENT_SCRIPT_URL = 'https://unpkg.com/@zalari-oss/ce-hello-world-pure@*/dist/index.js';
+      const ELEMENT_TAGNAME = 'z4i-hello-world';
+
+      function load() {
+
+        // hook-up handlers
+
+
+      }
+
+      function loadScriptInElement(scriptUrl, element) {
+        let scriptElement = document.createElement('script');
+        scriptElement.src = scriptUrl;
+        element.appendChild(scriptElement);
+      }
+
+      function getHostElement() {
+        return document.querySelector('#host');
+      }
+
+      function addAndLoadHelloWorld() {
+       // we are appending to the host
+        const hostElement = getHostElement();
+        loadScriptInElement(ELEMENT_SCRIPT_URL, hostElement);
+        // and we finally add the actual tag
+        let ceElement = document.createElement(ELEMENT_TAGNAME);
+        hostElement.appendChild(ceElement)
+      }
+
+      function removeHelloWorlds() {
+        const hostElement = getHostElement();
+        // we like hacks
+        hostElement.innerHTML = '';
+      }
+
+
+    </script>
+    <button onclick="addAndLoadHelloWorld()">Add z4iHelloWorld</button>
+    <button onclick="removeHelloWorlds()">Remove z4iHelloWorld</button>
+    <div id="host">
+
+    </div>
   </body>
 </html>
