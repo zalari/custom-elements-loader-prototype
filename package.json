@@ -4,7 +4,13 @@
   "description": "This is a prototype for dynamically loading CustomElements and re-applying them instantly for instant updates.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel src/index.html",
+    "prestart:examples": "shx cp -f dist/src.*.js src/examples/dist/index.js",
+    "start:examples": "http-server src/examples -c-1",
+    "build": "parcel build src/index.ts",
+    "parcel": "parcel",
+    "http-server": "http-server"
   },
   "repository": {
     "type": "git",
