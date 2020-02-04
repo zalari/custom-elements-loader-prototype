@@ -38,23 +38,29 @@ function createWrapperComponent(orgTagName: string) {
   };
 }
 
-// monkey patch CustomElementAPI
-
 // old ref
-const oldCustomElementAPI = customElements;
-// and now be gone
-customElements = {
-  define(ceTagName: string, ceClass: object) {
-    console.log('Want to define', ceTagName, 'with', ceClass);
-    // make a lookup for ceTagName in cache if counter is not defined, zero it
-    if (!ceCache.get(ceTagName)) {
-      ceCache.set(ceTagName, { counter: 0, ceClass });
-      // and define initial wrapper _ONCE_
-      oldCustomElementAPI.define(ceTagName, createWrapperComponent(ceTagName));
+// const oldCustomElements: {define: any} = {define: undefined};
+// (oldCustomElements as any).define = customElements.define;
+
+const oldCustomElements = customElements;
+// and now be gone by using Object.defineProperty on window, because simply overwriting does not work :(
+Object.defineProperty(window, 'customElements', {
+  get: () => ({
+    define(ceTagName: string, ceClass: object) {
+      console.log('Want to define', ceTagName, 'with', ceClass);
+      // make a lookup for ceTagName in cache if counter is not defined, zero it
+      if (!ceCache.get(ceTagName)) {
+        ceCache.set(ceTagName, { counter: 1, ceClass });
+        // and define initial wrapper _ONCE_
+        oldCustomElements.define(ceTagName, createWrapperComponent(ceTagName));
+      }
+      // increase counter
+      ceCache.get(ceTagName)!.counter = ceCache.get(ceTagName)!.counter + 1;
+      // and define "inner" ce
+      oldCustomElements.define(`${ ceTagName }-${ ceCache.get(ceTagName)!.counter }`, ceClass as any);
     }
-    // increase counter
-    ceCache.get(ceTagName)!.counter++;
-    // and define "inner" ce
-    oldCustomElementAPI.define(`${ceTagName}-${ceCache.get(ceTagName)!.counter}`, ceClass as any);
-  }
-} as any;
+    // TODO: we might need to re-route or implement the rest of the CustomElement API :), to actually not breaking
+    // tooo much
+
+  })
+});
