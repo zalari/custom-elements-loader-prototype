@@ -2,20 +2,40 @@
   <head>
     <title>Custom-Element-Loader-Prototype</title>
   </head>
-  <body>
+  <body onload="load()">
     <script src="./index.ts"></script>
     <script>
-      customElements.define('hello-world', class extends HTMLElement {
 
-        constructor() {
-          super();
+      function defineHelloWorld(greeting = 'HELLO AGAIN') {
+
+        // only define, if not already defined
+        if (!customElements.get('hello-world')) {
+          customElements.define('hello-world', class extends HTMLElement {
+
+            constructor() {
+              super();
+              console.log('Construct CE!')
+            }
+
+            connectedCallback() {
+              console.log('I am connected!');
+              this.innerHTML = `<div>${greeting}</div>`;
+            }
+
+          })
+        } else {
+          throw new Error('Already defined!');
         }
+      }
 
-        connectedCallback() {
-          this.innerHTML = `<div>HELLO AGAIN</div>`;
-        }
+      function load() {
+        defineHelloWorld();
+      }
 
-      })
+      function addHelloWorld() {
+        document.body.appendChild(document.createElement('hello-world'));
+      }
+
     </script>
     <h1>Custom Element Loader Prototype!</h1>
     <hello-world></hello-world>
