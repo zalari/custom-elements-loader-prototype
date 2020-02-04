@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html",
-    "prestart:examples": "shx cp -f src/index.js src/examples/dist/index.js",
-    "start:examples": "http-server src/examples -c-1",
-    "build": "tsc",
+    "prestart:examples": "shx cp -f dist/index.js src/examples/dist/index.js",
+    "start:examples": "http-server src/examples -c-1 -p 9000",
+    "build": "parcel build src/index.ts",
     "parcel": "parcel",
     "http-server": "http-server",
     "tsc": "tsc"
