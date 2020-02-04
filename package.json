@@ -6,11 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html",
-    "prestart:examples": "shx cp -f dist/src.*.js src/examples/dist/index.js",
+    "prestart:examples": "shx cp -f src/index.js src/examples/dist/index.js",
     "start:examples": "http-server src/examples -c-1",
-    "build": "parcel build src/index.ts",
+    "build": "tsc",
     "parcel": "parcel",
-    "http-server": "http-server"
+    "http-server": "http-server",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",

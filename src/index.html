@@ -4,6 +4,20 @@
   </head>
   <body>
     <script src="./index.ts"></script>
+    <script>
+      customElements.define('hello-world', class extends HTMLElement {
+
+        constructor() {
+          super();
+        }
+
+        connectedCallback() {
+          this.innerHTML = `<div>HELLO AGAIN</div>`;
+        }
+
+      })
+    </script>
     <h1>Custom Element Loader Prototype!</h1>
+    <hello-world></hello-world>
   </body>
 </html>
