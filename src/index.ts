@@ -64,11 +64,22 @@ Object.defineProperty(window, 'customElements', {
         oldCustomElements.define(`${ceTagName}-${ceCache.get(ceTagName)!.counter}`, ceClass as any);
       }
     },
-    /*whenDefined(ceTagName: string) {
+    whenDefined(ceTagName: string) {
+      // basically this boils down to returning whether the wrapper as been setup
       return oldCustomElements.whenDefined(ceTagName);
-    },*/
+    },
     get(ceTagName: string) {
-      return oldCustomElements.get(ceTagName);
+      // all tags that we manage are wrapped; those that we do not manage
+      // which should be none, because we need to be loaded _early_ are
+      // resort to the original registry
+      if (ceCache.get(ceTagName)) {
+        // we resort to undefined, because our managed CEs would that way only return the wrapper
+        // because the far most often usage of ce.get() is whether to define an element or not,
+        // we deliberately return undefined, because we can _re-define_ custom elements
+        return undefined;
+      } else {
+        return oldCustomElements.get(ceTagName);
+      }
     },
 
   }),
