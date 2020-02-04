@@ -50,17 +50,26 @@ Object.defineProperty(window, 'customElements', {
       console.log('Want to define', ceTagName, 'with', ceClass);
       // make a lookup for ceTagName in cache if counter is not defined, zero it
       if (!ceCache.get(ceTagName)) {
-        ceCache.set(ceTagName, { counter: 1, ceClass });
+        ceCache.set(ceTagName, {counter: 1, ceClass});
         // and define initial wrapper _ONCE_
         oldCustomElements.define(ceTagName, createWrapperComponent(ceTagName));
+        // and actual impl
+        oldCustomElements.define(`${ceTagName}-${ceCache.get(ceTagName)!.counter}`, ceClass as any);
+      } else {
+        console.log('Add another version of the truth');
+        // it already exists so just increase the counter and define a new instance for it
+        // increase counter
+        ceCache.get(ceTagName)!.counter = ceCache.get(ceTagName)!.counter + 1;
+        // and define "inner" ce
+        oldCustomElements.define(`${ceTagName}-${ceCache.get(ceTagName)!.counter}`, ceClass as any);
       }
-      // increase counter
-      ceCache.get(ceTagName)!.counter = ceCache.get(ceTagName)!.counter + 1;
-      // and define "inner" ce
-      oldCustomElements.define(`${ ceTagName }-${ ceCache.get(ceTagName)!.counter }`, ceClass as any);
-    }
-    // TODO: we might need to re-route or implement the rest of the CustomElement API :), to actually not breaking
-    // tooo much
+    },
+    /*whenDefined(ceTagName: string) {
+      return oldCustomElements.whenDefined(ceTagName);
+    },*/
+    get(ceTagName: string) {
+      return oldCustomElements.get(ceTagName);
+    },
 
-  })
+  }),
 });
