@@ -24,3 +24,10 @@ This will happily work together with a CDN like [Unpkg.com](https://unpkg.com) b
 
 ## TODOs:
 * write at least basic tests, that are running the _manual integration tests_(**TM**) _automatically_ via [Puppeteer](https://github.com/puppeteer/puppeteer)
+  * test for good impl of CE API
+* actually do not abuse TS anymore:
+  * get rid of `any`
+  * use DOM Interfaces for contracts
+* re-route attributes
+* re-route slot projections
+* do some naive comparison whether new version of CE is the same as old one...
