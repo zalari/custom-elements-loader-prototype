@@ -12,13 +12,32 @@ function createWrapperComponent(orgTagName: string) {
   // we dynamically create a customElement by returning an anon class
   return class extends HTMLElement {
 
+    private _realElementRef: HTMLElement | undefined;
+
     constructor() {
       super();
     }
 
     connectedCallback() {
       console.log('Wrapper for ', orgTagName, 'added!');
-      this.innerHTML = this.render();
+      this.attachShadow({ mode: 'open' });
+      // console.log('assignedElements:', slotRef.assignedElements());
+      this.shadowRoot!.innerHTML = this.render();
+      this._realElementRef = this.shadowRoot!.querySelector(`${orgTagName}-${this.currentCe!.counter}`) as HTMLElement;
+      // we need to register an slotchanged event handler for the slot, once the slot contents changes,
+      // change it in the real deal...
+      const slotRef = this.shadowRoot!.querySelector('slot') as HTMLSlotElement;
+      slotRef.addEventListener('slotchanged', ()=> {
+        console.log('Slot content changed...')
+      });
+      // for the time being we just support text content
+      // TODO add at least some minor typeguards...
+      const hasFirstTextNode = slotRef.assignedNodes()[0] as Text;
+      if (hasFirstTextNode) {
+        console.log('Got me text', hasFirstTextNode);
+        // this should not work, but in the end it does :)
+        this._realElementRef.innerText = hasFirstTextNode.wholeText;
+      }
     }
 
     disconnectedCallback() {
