@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Pure Custom Elements on the rocks - The Real world</title>
+    <script src="/dist/index.js"></script>
+  </head>
+  <body onload="load()">
+    <script>
+
+      const ELEMENT_SCRIPT_URL = 'https://unpkg.com/@vanillawc/wc-marquee@*/index.js';
+      const ELEMENT_TAGNAME = 'wc-marquee';
+
+      function load() {
+
+        // hook-up handlers
+
+
+      }
+
+      function loadScriptInElement(scriptUrl, element) {
+        let scriptElement = document.createElement('script');
+        // TODO: expose this in UI
+        scriptElement.setAttribute('type', "module");
+        scriptElement.src = scriptUrl;
+        element.appendChild(scriptElement);
+      }
+
+      function getHostElement() {
+        return document.querySelector('#host');
+      }
+
+      function addAndLoadRealWorld() {
+       // we are appending to the host
+        const hostElement = getHostElement();
+        loadScriptInElement(ELEMENT_SCRIPT_URL, hostElement);
+        // and we finally add the actual tag
+        let ceElement = document.createElement(ELEMENT_TAGNAME);
+        // and some markup for it
+        ceElement.innerText="We do it because we can!";
+        hostElement.appendChild(ceElement)
+      }
+
+      function removeRealWorlds() {
+        const hostElement = getHostElement();
+        // we like hacks
+        hostElement.innerHTML = '';
+      }
+
+
+    </script>
+    <button onclick="addAndLoadRealWorld()">Add RealHelloWorld</button>
+    <button onclick="removeRealWorlds()">Remove RealHelloWorld</button>
+    <div id="host">
+
+    </div>
+  </body>
+</html>
