@@ -55,7 +55,7 @@ function createWrapperComponent(orgTagName: string) {
 
 
     render() {
-      return `<${ orgTagName }-${ this.currentCe!.counter }/>`;
+      return `<${ orgTagName }-${ this.currentCe!.counter }/><slot></slot>`;
     }
 
 
