@@ -37,6 +37,9 @@ function createWrapperComponent(orgTagName: string) {
         console.log('Got me text', hasFirstTextNode);
         // this should not work, but in the end it does :)
         this._realElementRef.innerText = hasFirstTextNode.wholeText;
+        // -> https://github.com/w3c/webcomponents/issues/753
+        // we set the TextNode to empty... because we cannot style it...
+        hasFirstTextNode.data = '';
       }
     }
 
