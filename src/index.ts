@@ -27,9 +27,10 @@ function createWrapperComponent(orgTagName: string) {
       // we need to register an slotchanged event handler for the slot, once the slot contents changes,
       // change it in the real deal...
       const slotRef = this.shadowRoot!.querySelector('slot') as HTMLSlotElement;
-      slotRef.addEventListener('slotchanged', ()=> {
-        console.log('Slot content changed...')
-      });
+      // TODO: this seems to be a race condition
+      // slotRef.addEventListener('slotchanged', ()=> {
+      //   console.log('Slot content changed...')
+      // });
       // for the time being we just support text content
       // TODO add at least some minor typeguards...
       const hasFirstTextNode = slotRef.assignedNodes()[0] as Text;
