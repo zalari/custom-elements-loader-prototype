@@ -2,11 +2,11 @@ console.log('CustomElementLoaderPrototype is ev0l');
 
 // we need to monkey patch CustomElements API
 
-// we maintain a counter for each customElement and
+// we maintain a version for each customElement and
 // we will always generate a wrapper on the fly, that is passing
 // for the time being nothing but the actual tag itself
 
-const ceCache = new Map<string, { counter: number; ceClass: object; }>();
+const ceCache = new Map<string, { version: number; ceClass: object; }>();
 
 // whitelist ces, that do not get the special treatment...
 const CE_WHITELIST: string[] = [
@@ -26,7 +26,7 @@ function createWrapperComponent(orgTagName: string) {
       console.log('Wrapper for ', orgTagName, 'added!');
       this.attachShadow({mode: 'open'});
       this.shadowRoot!.innerHTML = this.render();
-      this._realElementRef = this.shadowRoot!.querySelector(`${orgTagName}-${this.currentCe!.counter}`) as HTMLElement;
+      this._realElementRef = this.shadowRoot!.querySelector(`${orgTagName}-${this.currentCe!.version}`) as HTMLElement;
       const slotRef = this.shadowRoot!.querySelector('slot') as HTMLSlotElement;
       // TODO: this seems to be a race condition
       // slotRef.addEventListener('slotchanged', ()=> {
@@ -55,7 +55,7 @@ function createWrapperComponent(orgTagName: string) {
 
 
     render() {
-      return `<${orgTagName}-${this.currentCe!.counter}/><slot></slot>`;
+      return `<${orgTagName}-${this.currentCe!.version}/><slot></slot>`;
     }
 
 
@@ -76,20 +76,20 @@ Object.defineProperty(window, 'customElements', {
         oldCustomElements.define(ceTagName, ceClass);
       } else {
         console.log('Want to define', ceTagName, 'with', ceClass);
-        // make a lookup for ceTagName in cache if counter is not defined, zero it
+        // make a lookup for ceTagName in cache if version is not defined, zero it
         if (!ceCache.get(ceTagName)) {
-          ceCache.set(ceTagName, {counter: 1, ceClass});
+          ceCache.set(ceTagName, {version: 1, ceClass});
           // and define initial wrapper _ONCE_
           oldCustomElements.define(ceTagName, createWrapperComponent(ceTagName));
           // and actual impl
-          oldCustomElements.define(`${ceTagName}-${ceCache.get(ceTagName)!.counter}`, ceClass as any);
+          oldCustomElements.define(`${ceTagName}-${ceCache.get(ceTagName)!.version}`, ceClass as any);
         } else {
           console.log('Add another version of the truth');
-          // it already exists so just increase the counter and define a new instance for it
-          // increase counter
-          ceCache.get(ceTagName)!.counter = ceCache.get(ceTagName)!.counter + 1;
+          // it already exists so just increase the version and define a new instance for it
+          // increase version
+          ceCache.get(ceTagName)!.version = ceCache.get(ceTagName)!.version + 1;
           // and define "inner" ce
-          oldCustomElements.define(`${ceTagName}-${ceCache.get(ceTagName)!.counter}`, ceClass as any);
+          oldCustomElements.define(`${ceTagName}-${ceCache.get(ceTagName)!.version}`, ceClass as any);
         }
       }
     },
