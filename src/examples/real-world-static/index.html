@@ -19,8 +19,9 @@
       function loadScriptInElement(scriptUrl, element) {
         let scriptElement = document.createElement('script');
         // TODO: expose this in UI
-        scriptElement.setAttribute('type', "module");
-        scriptElement.src = scriptUrl;
+        scriptElement.setAttribute('type', 'module');
+        // FIXME: at least in chrome, chrome won't reload the script for modules... :( that's way we need some nifty ~ball~cache-busting!
+        scriptElement.src = scriptUrl + '?t=' + new Date().getTime();
         element.appendChild(scriptElement);
       }
 
