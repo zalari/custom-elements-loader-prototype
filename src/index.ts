@@ -110,6 +110,24 @@ Object.defineProperty(window, 'customElements', {
         return oldCustomElements.get(ceTagName);
       }
     },
-
-  }),
+    rollback(ceTagName: string, version?: number): number | undefined {
+      // rollback a ceTagName to either the previous version or a specific one...
+      const managedTag = ceCache.get(ceTagName);
+      if (managedTag) {
+        // either we rollback to a specific version that gets passed
+        if (version && version < managedTag.version) {
+          managedTag.version = version;
+          return version;
+        } else if (version && version > managedTag.version) {
+          return undefined;
+        } else {
+        // or we rollback to the last version
+          managedTag.version = managedTag.version - 1;
+          return managedTag.version;
+        }
+      } else {
+        return undefined;
+      }
+    }
+  })
 });
